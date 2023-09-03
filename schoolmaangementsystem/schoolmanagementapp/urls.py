@@ -1,0 +1,32 @@
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('',views.home_redirect,name='home'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('forgot_password/', views.forgot_pass, name='forgot_password'),
+    path('change_password/<int:id>', views.change_pass, name='change_password'),
+     path("password_reset/<uidb64>/<token>",views.password_reset,name="password_reset"),
+    path('principal-dashboard/', views.principal_dashboard, name='principal_dashboard'),
+    path('teacher-dashboard/', views.teacher_dashboard, name='teacher_dashboard'),
+    path('student-dashboard/', views.student_dashboard, name='student_dashboard'),
+    path('list-student/', views.student_list, name='list_students'),
+    path('edit-student/<int:id>', views.edit_student, name='edit_students'),
+    path('delete-student/<int:id>', views.delete_student, name='delete_students'),
+    path('list-student-json/', views.student_list_json, name='json_list_students'),
+    path('add-student/', views.add_student, name='add_student'),
+    path('add-teacher/', views.add_teacher, name='add_teacher'),
+    path('add-subject/', views.add_subject, name='add_subject'),
+    path('add-classroom/', views.add_classroom, name='add_classroom'),
+    path('list-classroom/', views.classroom_list, name='list_classrooms'),
+    path('list-classroom-json/', views.classroom_list_json, name='json_list_classrooms'),
+    path('list-subject/', views.subject_list, name='list_subjects'),
+    path('list-subject-json/', views.subject_list_json, name='json_list_subjects'),
+    path('edit-subject/<int:id>', views.edit_subject, name='edit_students'),
+    path('delete-subject/<int:id>', views.delete_subject, name='delete_students'),
+
+    path('list-teachers/', views.teacher_list, name='list_teachers'),
+    path('list-teachers-json/', views.teacher_list_json, name='json_list_teachers'),
+    path('edit-teacher/<int:id>', views.edit_teacher, name='edit_students'),
+    path('delete-teacher/<int:id>', views.delete_teacher, name='delete_students'),
+]

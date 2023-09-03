@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<style>
+
+    #typeEffect::after {
+    content: '|';  
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 49% {
+        opacity: 1; 
+    }
+    50%, 100% {
+        opacity: 0; 
+    }
+}
+
+
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="color-cng">
+<h1><div id="typeEffect"> </div></h1>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js%}
+<script>
+let text = "Welcome to the Principal Dashboard of my Student Management Website.......";  
+let currentIndex = 0;                        
+let speed = 120;                             
+
+function typeEffect() {
+    
+    if (currentIndex < text.length) {
+        document.getElementById("typeEffect").innerHTML += text.charAt(currentIndex);
+        currentIndex++;
+        
+        setTimeout(typeEffect, speed);
+    }
+}
+
+
+typeEffect();
+
+</script>
+{% endblock %}

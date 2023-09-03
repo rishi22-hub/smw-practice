@@ -1,0 +1,117 @@
+{%extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+{% endblock %}
+
+
+{% block content %}
+      <table id="mytable" border="1">
+        <thead>
+            <tr>
+        <th> class Name</th>
+        <th>grade</th>
+        <th>teachers</th>
+        <th>Actions</th>
+    </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+      </table>
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    console.log("inside ajax")
+    $('#mytable').DataTable({
+        "serverSide": true,
+      
+        "ajax": {
+            'url': '{% url "json_list_classrooms" %}',
+            'type': 'GET',
+            dataSrc: function (json) {
+                console.log(json['data']);
+                return json['data'];
+            }
+        },
+        "order":[],
+        "columns": [
+            { "data": "name" },
+            { "data": "grade" },
+            {"data":"teacher"},
+                       
+            {
+                "data": "id", "render": function (data, type, row) {
+                    return `
+                        <button onclick="alert_delete(${row.id})" class="btn btn-danger btn-sm delete-field">
+                           
+                                <i class="fas fa-trash" style="font-size:20px"></i>
+                           
+                        </button>
+                       
+                           
+                            <a href="/edit-subject/${row.id}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-pencil-alt" style="color:white;font-size:20px;"></i>
+                        </a>
+                      
+                  `
+                        
+                }
+            },
+        ]
+    });
+});
+
+function alert_delete(id) {
+    console.log(id);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+container: 'custom-alert-container', 
+},
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `/delete-subject/${id}`,
+                type: 'POST',  
+                headers: {
+                        'X-CSRFToken': csrfToken
+                },
+                success: function (response) {
+                    console.log(response.result)
+                        Swal.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        );
+                        
+                        $('#mytable').DataTable().ajax.reload();
+                
+                },
+                error: function () {
+                    console.log("error in fetching and clicking")
+                    $('#mytable').DataTable().ajax.reload();
+                }
+            });
+        }
+    });
+}
+</script>
+
+
+{% endblock %}
+
